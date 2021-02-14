@@ -1,0 +1,83 @@
+- hosts: localhost
+  tasks:
+  - name: "mounting dvd"
+    mount:
+      path: "/dvd/"
+      src: "/dev/sr0"
+      state: present
+      fstype: "iso9660"
+
+  - name: "setting repo appstream"
+    yum_repository:
+      baseurl: "/dvd/AppStream"
+      name: "AppStreeam"
+      description: "AppStream/"
+      gpgcheck: false
+ 
+  - name: "setting repo : baseOS"
+    yum_repository:
+      baseurl: "/dvd/BaseOS/"
+      name: "BaseOS"
+      description: "BaseOS"
+      gpgcheck: false
+
+  - name: "setting repo of docker-ce"
+    yum_repository:
+      baseurl: "https://download.docker.com/linux/centos/7/x86_64/stable"
+      name: "docker-ce"
+      description: "docker-ce"
+      gpgcheck: false
+  
+  - name: "checking whether docker is installed or not"
+    command: "docker --version"
+    ignore_errors: true
+    register: x
+
+  - debug:
+      var: x.rc
+
+  - name: "installation of docker-ce"
+    command: "yum install docker-ce --nobest -y "
+    when: x.rc != 0
+
+  - name: "starting docker service"
+    service:
+      name: "docker"
+      state: started
+
+  - name: "installing python docker SDK"
+    pip:
+      name: "docker"
+      
+  
+  - name: "pulling container image"
+    docker_image:
+      name: "rishijraj/apache:v2"
+      source: pull
+
+  - name: "running container and exposing to public"
+    docker_container:
+      name: "test90"
+      state: started
+      image: "rishijraj/apache:v2"
+      published_ports:
+      - 9878:80
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
