@@ -1,4 +1,0 @@
-FROM centos
-RUN yum install httpd -y
-RUN echo "this is testing" | cat > /usr/www/html/
-CMD ["/usr/sbin/httpd" , "-D" , "FOREGROUND" ]
