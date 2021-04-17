@@ -1,0 +1,9 @@
+---
+# tasks file for myapache
+
+- package:
+      name: "httpd"
+
+- service:
+     name: "httpd"
+     state: started      

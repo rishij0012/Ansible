@@ -1,0 +1,5 @@
+[loadbalancer]
+192.168.29.100 ansible_user=root ansible_password=redhat ansible_connection=ssh
+
+[webserver]
+192.168.29.138 ansible_user=root ansible_password=redhat ansible_connection=ssh
